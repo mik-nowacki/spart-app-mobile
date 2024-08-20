@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SpartApp</string>
+    <string name="title_activity_training._training_main">training.TrainingMain</string>
+    <string name="title_activity_training_main">TrainingMain</string>
+    <string name="title_activity_training">TrainingActivity</string>
+    <string name="title_activity_create_program">CreateProgramActivity</string>
+</resources>
