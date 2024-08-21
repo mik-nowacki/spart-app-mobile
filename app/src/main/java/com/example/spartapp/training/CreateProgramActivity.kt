@@ -15,11 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCompositionContext
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.spartapp.training.ui.theme.SpartAppTheme
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,12 +37,56 @@ class CreateProgramActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SpartAppTheme {
-                userInputs()
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    UserInputs()
+                    UserPrograms()
+                }
             }
         }
     }
 
-    fun SaveProgram(program: Program) = CoroutineScope(Dispatchers.IO).launch {
+    private suspend fun getPrograms(): String {
+        return try {
+            val querySnapshot = programCollectionRef.get().await()
+            val sb = StringBuilder()
+            for (document in querySnapshot.documents) {
+                val program = document.toObject<Program>()
+                sb.append("$program\n")
+            }
+            sb.toString()
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@CreateProgramActivity, e.message, Toast.LENGTH_LONG).show()
+            }
+            "failed"
+        }
+    }
+
+    @Composable
+    fun UserPrograms() {
+        val coroutineScope = rememberCoroutineScope()
+        val programs = remember { mutableStateOf("hello") }
+
+        val getProgramOnClick: () -> Unit = {
+            coroutineScope.launch {
+                programs.value = getPrograms()
+            }
+        }
+
+        androidx.compose.material3.Button(onClick = getProgramOnClick) {
+            Text(text = "Get programs")
+        }
+        Text(text = programs.value)
+
+    }
+
+    private fun saveProgram(program: Program) = CoroutineScope(Dispatchers.IO).launch {
         try {
             programCollectionRef.add(program).await()
             withContext(Dispatchers.Main) {
@@ -57,38 +104,32 @@ class CreateProgramActivity : ComponentActivity() {
     }
 
     @Composable
-    fun userInputs() {
+    fun UserInputs() {
         var prName by remember { mutableStateOf("") }
         var prType by remember { mutableStateOf("") }
         var prDuration by remember { mutableStateOf("") }
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            OutlinedTextField(
-                value = prName,
-                onValueChange = { prName = it },
-                label = { Text("Name") })
 
-            OutlinedTextField(
-                value = prType,
-                onValueChange = { prType = it },
-                label = { Text("Type") })
+        OutlinedTextField(
+            value = prName,
+            onValueChange = { prName = it },
+            label = { Text("Name") })
 
-            OutlinedTextField(
-                value = prDuration,
-                onValueChange = { prDuration = it },
-                label = { Text("Duration") })
+        OutlinedTextField(
+            value = prType,
+            onValueChange = { prType = it },
+            label = { Text("Type") })
 
-            androidx.compose.material3.Button(onClick = {
-                SaveProgram(Program(name = prName, type = prType, duration = prDuration))
-            }) {
-                Text(text = "Save program")
-            }
+        OutlinedTextField(
+            value = prDuration,
+            onValueChange = { prDuration = it },
+            label = { Text("Duration") })
+
+        androidx.compose.material3.Button(onClick = {
+            saveProgram(Program(name = prName, type = prType, duration = prDuration))
+        }) {
+            Text(text = "Save program")
+
         }
     }
 }

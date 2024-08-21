@@ -1,7 +1,7 @@
 package com.example.spartapp.training
 
 data class Program(
-    var name: String,
-    var type: String,
-    var duration: String
+    var name: String = "empty field",
+    var type: String = "empty field",
+    var duration: String = "empty field"
 )
