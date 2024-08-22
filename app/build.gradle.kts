@@ -70,5 +70,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.kotlinx.coroutines.android)
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
 }

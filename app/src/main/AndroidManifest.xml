@@ -13,12 +13,12 @@
         android:theme="@style/Theme.SpartApp"
         tools:targetApi="31">
         <activity
-            android:name=".training.CreateProgramActivity"
+            android:name=".training.activities.CreateProgramActivity"
             android:exported="false"
             android:label="@string/title_activity_create_program"
             android:theme="@style/Theme.SpartApp" />
         <activity
-            android:name=".training.TrainingActivity"
+            android:name=".training.activities.TrainingActivity"
             android:exported="false"
             android:label="@string/title_activity_training"
             android:theme="@style/Theme.SpartApp" />
