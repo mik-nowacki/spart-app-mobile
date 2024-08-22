@@ -1,4 +1,4 @@
-package com.example.spartapp.training
+package com.example.spartapp.training.components
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

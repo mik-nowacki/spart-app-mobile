@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.spartapp.training.components.UserInputTextField
 import com.example.spartapp.training.models.Program
 import com.example.spartapp.training.ui.theme.SpartAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -94,19 +95,6 @@ class CreateProgramActivity : ComponentActivity() {
     }
 
     @Composable
-    fun UserInputTextField(
-        value: String,
-        onValueChange: (String) -> Unit,
-        label: String
-    ) {
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            label = { Text(text = label) })
-
-    }
-
-    @Composable
     fun UserInputs() {
         var prTitle by remember { mutableStateOf("") }
         var prType by remember { mutableStateOf("") }
@@ -158,35 +146,4 @@ class CreateProgramActivity : ComponentActivity() {
 
 }
 
-@Composable
-fun CreateWorkoutTitle() {
-    Box(
-        modifier = Modifier
-            .width(240.dp)
-            .height(40.dp)
-            .clip(RoundedCornerShape(15.dp))
-            .background(MaterialTheme.colorScheme.secondaryContainer)
-            .padding(6.dp)
-    ) {
-        Text(
-            "Create your workout",
-            fontSize = 24.sp,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-    }
-
-
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xD3D3D3,
-    widthDp = 412, heightDp = 915
-)
-@Composable
-fun CreateProgramActivityPreview() {
-
-        CreateWorkoutTitle()
-
-}
 
