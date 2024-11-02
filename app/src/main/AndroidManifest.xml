@@ -13,6 +13,11 @@
         android:theme="@style/Theme.SpartApp"
         tools:targetApi="31">
         <activity
+            android:name=".diet.activities.DietActivity"
+            android:exported="false"
+            android:label="@string/title_activity_diet"
+            android:theme="@style/Theme.SpartApp" />
+        <activity
             android:name=".training.activities.CreateProgramActivity"
             android:exported="false"
             android:label="@string/title_activity_create_program"
